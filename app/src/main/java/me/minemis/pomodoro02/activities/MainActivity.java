@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         this.setContentView(R.layout.activity_main);
         this.assignValues();
         this.saveManager.load();
+
+        this.roundManager.nextRound();
     }
 
     @Override

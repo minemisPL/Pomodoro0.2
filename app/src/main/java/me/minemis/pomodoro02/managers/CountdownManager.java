@@ -14,34 +14,39 @@ public class CountdownManager {
     private final ProgressBar progressBar;
     private CountDownTimer countDownTimer;
     private long originTimeInMinutes;
+    private long timeLeftInMillis;
     private double progressPart;
     private double progress;
     private boolean isRunning = false;
+    private boolean canPass = true;
 
     public CountdownManager(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         ViewManager.Main mainViewManager = mainActivity.getMainViewManager();
         this.txtTimer = mainViewManager.getTextViewTimer();
         this.progressBar = mainViewManager.getProgressBar();
-        this.newCountdown(PomOption.FOCUS.getDefaultValue());
-
     }
 
     public void newCountdown(long timeInMinutes) {
-        updateCountdownText(timeInMinutes * 60 * 1000);
+        timeLeftInMillis = timeInMinutes * 60 * 1000;
+
+        updateCountdownText();
 
         this.originTimeInMinutes = timeInMinutes;
 
         this.progressPart = 10000 / ((double) originTimeInMinutes * 60);
 
         this.progressBar.setProgress(10000);
+        this.progress = 10000;
 
         countDownTimer = new CountDownTimer(originTimeInMinutes * 60 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
-                updateCountdownText(millisUntilFinished);
+                timeLeftInMillis = millisUntilFinished;
+                updateCountdownText();
                 progress = progress - progressPart;
+
                 progressBar.setProgress((int) progress);
             }
 
@@ -53,18 +58,31 @@ public class CountdownManager {
     }
 
     public void startTimer() {
-        isRunning = true;
-        new Handler().postDelayed(() -> {
-            countDownTimer.start();
-        }, 1000);
+
+        updateCountdownText();
+
+        if (canPass) {
+            canPass = false;
+            isRunning = true;
+
+            new Handler().postDelayed(() -> {
+                updateCountdownText();
+                countDownTimer.start();
+                canPass = true;
+            }, 1000);
+        }
     }
 
     public void stopTimer() {
+        if (countDownTimer == null) {
+            return;
+        }
+
         countDownTimer.cancel();
         isRunning = false;
     }
 
-    private void updateCountdownText(long timeLeftInMillis) {
+    private void updateCountdownText() {
         int minutes = (int) (timeLeftInMillis / 1000) / 60;
         int seconds = (int) (timeLeftInMillis / 1000) % 60;
 
