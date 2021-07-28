@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Pomodoro02</string>
+    <string name="focus">Focus</string>
+    <string name="short_brake">Short Brake</string>
+    <string name="long_brake">Long Brake</string>
+    <string name="rounds">Rounds</string>
+    <string name="reset">Reset</string>
+    <string name="total">Total</string>
+    <string name="focus_time">Focus Time</string>
+    <string name="short_brake_time">Short Brake Time</string>
+    <string name="long_brake_time">Long Brake Time</string>
+</resources>

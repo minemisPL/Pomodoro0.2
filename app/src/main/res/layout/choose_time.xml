@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/layout_slider_work"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp">
+
+
+        <TextView
+            android:id="@+id/txt_slider_work_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="25" />
+
+        <TextView
+            android:id="@+id/txt_focus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txt_slider_work_value"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/focus_time" />
+
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider_work"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/txt_slider_work_value"
+            android:layout_margin="30dp"
+            android:layout_marginTop="50dp"
+            android:valueFrom="10"
+            android:valueTo="90"
+            android:value="25"
+
+            app:labelBehavior="gone" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_slider_break"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/layout_slider_work"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/layout_slider_work"
+        app:layout_constraintTop_toBottomOf="@+id/layout_slider_work">
+
+        <TextView
+            android:id="@+id/txt_slider_brake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="5" />
+
+        <TextView
+            android:id="@+id/txt_break"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txt_slider_brake"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/short_brake_time" />
+
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider_break"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/txt_slider_brake"
+            android:layout_margin="30dp"
+            android:layout_marginTop="50dp"
+            android:valueFrom="1"
+            android:valueTo="60"
+            android:value="5"
+
+            app:labelBehavior="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_slider_long_break"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/layout_slider_break"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/layout_slider_break"
+        app:layout_constraintTop_toBottomOf="@+id/layout_slider_break">
+
+        <TextView
+            android:id="@+id/txt_slider_long_brake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="10" />
+
+        <TextView
+            android:id="@+id/txt_long_brake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txt_slider_long_brake"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/long_brake_time" />
+
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider_long_brake"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/txt_slider_long_brake"
+            android:layout_margin="30dp"
+            android:layout_marginTop="50dp"
+            android:valueFrom="1"
+            android:valueTo="60"
+            android:value="10"
+
+            app:labelBehavior="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_slider_rounds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/layout_slider_long_break"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/layout_slider_long_break"
+        app:layout_constraintTop_toBottomOf="@+id/layout_slider_long_break">
+
+        <TextView
+            android:id="@+id/txt_slider_rounds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="10" />
+
+        <TextView
+            android:id="@+id/txt_long_rounds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txt_slider_rounds"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/rounds" />
+
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider_rounds"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/txt_slider_rounds"
+            android:layout_margin="30dp"
+            android:layout_marginTop="50dp"
+            android:valueFrom="2"
+            android:valueTo="12"
+            android:value="4"
+
+            app:labelBehavior="gone" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_reset_choose_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_slider_rounds" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
