@@ -6,7 +6,12 @@ import android.util.DisplayMetrics;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.slider.Slider;
+
+import java.util.Optional;
+
 import me.minemis.pomodoro02.R;
+import me.minemis.pomodoro02.listeners.choosetime.ResetButtonChooseTimeListener;
 import me.minemis.pomodoro02.managers.PomOption;
 import me.minemis.pomodoro02.managers.RoundManager;
 import me.minemis.pomodoro02.managers.SliderManager;
@@ -37,7 +42,26 @@ public class ChooseTimeActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        mainActivity.getSaveManager().save();
 
+        if (checkIfChanged()) {
+            roundManager.resetRound();
+        }
+        roundManager.updateText();
+        roundManager.checkIfRoundAreWrong();
+    }
+
+    private boolean checkIfChanged() {
+        PomOption currentState = roundManager.getPreviousState();
+
+        Optional<Slider> slider = sliderManager.getSlider(currentState);
+        Optional<Integer> originalValue = sliderManager.getOriginValue(currentState);
+
+        if ( !slider.isPresent() || !originalValue.isPresent()) {
+            return false;
+        }
+
+        return originalValue.get() != slider.get().getValue();
     }
 
     private void assignValues() {
@@ -53,6 +77,9 @@ public class ChooseTimeActivity extends AppCompatActivity {
         sliderManager.addSlider(PomOption.ROUNDS, ctViewManager.getSliderRounds(), ctViewManager.getTxtRounds());
 
         sliderManager.setListeners();
+        ctViewManager.getResetButton().setOnClickListener(new ResetButtonChooseTimeListener(this));
+
+        roundManager.getSettings().forEach(sliderManager::assignSliderValue);
     }
 
     private void setMetrics() {
@@ -67,10 +94,6 @@ public class ChooseTimeActivity extends AppCompatActivity {
 
     public SliderManager getSliderManager() {
         return sliderManager;
-    }
-
-    public ViewManager.ChooseTime getCtViewManager() {
-        return ctViewManager;
     }
 
     public RoundManager getRoundManager() {

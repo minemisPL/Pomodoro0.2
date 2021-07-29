@@ -12,7 +12,9 @@ public class RoundManager {
 
     private final Map<PomOption, Integer> settings = new HashMap<>();
     private final CountdownManager countdownManager;
+    private final ViewManager.Main mainViewManager;
     private PomOption currentState = PomOption.FOCUS;
+    private PomOption previousState = PomOption.SHORT_BREAK;
     private int currentRound = 0;
     private int totalRounds = 0;
     private final TextView txtWhichRound;
@@ -21,10 +23,11 @@ public class RoundManager {
 
     public RoundManager(MainActivity mainActivity) {
         this.countdownManager = mainActivity.getCountdownManager();
-        ViewManager.Main mainViewManager = mainActivity.getMainViewManager();
+        mainViewManager = mainActivity.getMainViewManager();
         this.txtWhichRound = mainViewManager.getTxtWhichRound();
         this.txtTotalRounds = mainViewManager.getTxtTotalRounds();
         this.txtState = mainViewManager.getTxtCurrentState();
+        assignSettings(PomOption.FOCUS, PomOption.SHORT_BREAK, PomOption.LONG_BREAK, PomOption.ROUNDS);
         updateText();
     }
 
@@ -32,6 +35,8 @@ public class RoundManager {
         this.countdownManager.newCountdown(getPomOptionValue(currentState));
 
         updateStateText();
+
+        previousState = currentState;
 
         if (currentState == PomOption.FOCUS) {
             currentRound++;
@@ -51,8 +56,14 @@ public class RoundManager {
         currentState = PomOption.FOCUS;
     }
 
+    public void resetRound() {
+        this.countdownManager.stopTimer();
+        this.countdownManager.newCountdown(getPomOptionValue(previousState));
+        this.mainViewManager.setPlayButtonAsArrow();
+    }
+
     @SuppressLint("SetTextI18n")
-    private void updateText() {
+    public void updateText() {
         txtWhichRound.setText(currentRound + "/" + getPomOptionValue(PomOption.ROUNDS));
         txtTotalRounds.setText(String.valueOf(totalRounds));
     }
@@ -70,6 +81,12 @@ public class RoundManager {
         return value;
     }
 
+    private void assignSettings(PomOption... options) {
+        for (PomOption option : options) {
+            settings.put(option, option.getDefaultValue());
+        }
+    }
+
     public void reset() {
         currentRound = 0;
         currentState = PomOption.FOCUS;
@@ -82,5 +99,15 @@ public class RoundManager {
 
     public Map<PomOption, Integer> getSettings() {
         return settings;
+    }
+
+    public PomOption getPreviousState() {
+        return previousState;
+    }
+
+    public void checkIfRoundAreWrong() {
+        if (currentRound >= getPomOptionValue(PomOption.ROUNDS)) {
+            reset();
+        }
     }
 }

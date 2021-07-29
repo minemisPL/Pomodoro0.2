@@ -12,30 +12,19 @@ import me.minemis.pomodoro02.activities.ChooseTimeActivity;
 import me.minemis.pomodoro02.listeners.choosetime.SliderListener;
 
 public class SliderManager {
-    private final Map<PomOption, Slider> sliderMap = new HashMap<>();
-    private final Map<PomOption, TextView> textMap = new HashMap<>();
+    private final Map<PomOption, Slider> sliders = new HashMap<>();
+    private final Map<PomOption, TextView> texts = new HashMap<>();
+    private final Map<PomOption, Integer> originValues = new HashMap<>();
 
     public void addSlider(PomOption pomOption, Slider slider, TextView textView) {
-        sliderMap.put(pomOption, slider);
-        textMap.put(pomOption, textView);
-    }
-
-    public Optional<Slider> getSlider(PomOption pomOption) {
-        return Optional.ofNullable(sliderMap.get(pomOption));
-    }
-
-    public Optional<PomOption> getPomOptionFromSlider(Slider slider) {
-        for (Map.Entry<PomOption, Slider> entry : sliderMap.entrySet()) {
-            if (entry.getValue().equals(slider)) {
-                return Optional.ofNullable(entry.getKey());
-            }
-        }
-        return Optional.empty();
+        sliders.put(pomOption, slider);
+        texts.put(pomOption, textView);
+        originValues.put(pomOption, pomOption.getDefaultValue());
     }
 
     public void setSliderValue(PomOption pomOption, int value) {
-        Slider slider = sliderMap.get(pomOption);
-        TextView textView = textMap.get(pomOption);
+        Slider slider = sliders.get(pomOption);
+        TextView textView = texts.get(pomOption);
 
         if (slider == null || textView == null) {
             return;
@@ -46,10 +35,11 @@ public class SliderManager {
     }
 
     public void setSliderValue(Slider slider, int value) {
-        for (Map.Entry<PomOption, Slider> entry : sliderMap.entrySet()) {
+        for (Map.Entry<PomOption, Slider> entry : sliders.entrySet()) {
+            System.out.println("Slider entry: " + entry);
             if (entry.getValue().equals(slider)) {
                 slider.setValue(value);
-                TextView sliderText = textMap.get(entry.getKey());
+                TextView sliderText = texts.get(entry.getKey());
 
                 if (sliderText == null) {
                     return;
@@ -60,11 +50,43 @@ public class SliderManager {
         }
     }
 
+    public void assignSliderValue(PomOption pomOption, int value) {
+        Slider slider = sliders.get(pomOption);
+        TextView textView = texts.get(pomOption);
+
+        if (slider == null || textView == null) {
+            return;
+        }
+
+        slider.setValue(value);
+        textView.setText(String.valueOf(value));
+        originValues.put(pomOption, value);
+    }
+
     public void setListeners() {
-        sliderMap.forEach(((pomOption, slider) -> slider.addOnChangeListener(new SliderListener(ChooseTimeActivity.getInstance()))));
+        sliders.forEach(((pomOption, slider) -> slider.addOnChangeListener(new SliderListener(ChooseTimeActivity.getInstance()))));
     }
 
     public void reset() {
-        sliderMap.forEach((key, value) -> setSliderValue(key, key.getDefaultValue()));
+        System.out.println("Reset start");
+        sliders.forEach((pomOption, slider) -> setSliderValue(pomOption, pomOption.getDefaultValue()));
+        System.out.println("Reset done");
+    }
+
+    public Optional<Integer> getOriginValue(PomOption pomOption) {
+        return Optional.ofNullable(originValues.get(pomOption));
+    }
+
+    public Optional<Slider> getSlider(PomOption pomOption) {
+        return Optional.ofNullable(sliders.get(pomOption));
+    }
+
+    public Optional<PomOption> getPomOptionFromSlider(Slider slider) {
+        for (Map.Entry<PomOption, Slider> entry : sliders.entrySet()) {
+            if (entry.getValue().equals(slider)) {
+                return Optional.ofNullable(entry.getKey());
+            }
+        }
+        return Optional.empty();
     }
 }

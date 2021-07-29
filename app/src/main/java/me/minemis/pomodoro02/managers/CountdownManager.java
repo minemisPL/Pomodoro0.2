@@ -38,8 +38,10 @@ public class CountdownManager {
 
         this.progressBar.setProgress(10000);
         this.progress = 10000;
+    }
 
-        countDownTimer = new CountDownTimer(originTimeInMinutes * 60 * 1000, 1000) {
+    private void newCountdownTimer() {
+        countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -52,7 +54,8 @@ public class CountdownManager {
 
             @Override
             public void onFinish() {
-                //mainActivity.getRoundManager().nextRound();
+                mainActivity.getRoundManager().nextRound();
+                startTimer();
             }
         };
     }
@@ -67,6 +70,7 @@ public class CountdownManager {
 
             new Handler().postDelayed(() -> {
                 updateCountdownText();
+                newCountdownTimer();
                 countDownTimer.start();
                 canPass = true;
             }, 1000);
@@ -75,6 +79,7 @@ public class CountdownManager {
 
     public void stopTimer() {
         if (countDownTimer == null) {
+            System.out.println("Null found!");
             return;
         }
 
