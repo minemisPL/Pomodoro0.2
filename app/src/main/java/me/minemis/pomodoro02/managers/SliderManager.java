@@ -36,7 +36,6 @@ public class SliderManager {
 
     public void setSliderValue(Slider slider, int value) {
         for (Map.Entry<PomOption, Slider> entry : sliders.entrySet()) {
-            System.out.println("Slider entry: " + entry);
             if (entry.getValue().equals(slider)) {
                 slider.setValue(value);
                 TextView sliderText = texts.get(entry.getKey());
@@ -68,9 +67,18 @@ public class SliderManager {
     }
 
     public void reset() {
-        System.out.println("Reset start");
         sliders.forEach((pomOption, slider) -> setSliderValue(pomOption, pomOption.getDefaultValue()));
-        System.out.println("Reset done");
+    }
+
+    public boolean checkIfChanged(PomOption currentState) {
+        Optional<Slider> slider = this.getSlider(currentState);
+        Optional<Integer> originalValue = this.getOriginValue(currentState);
+
+        if ( !slider.isPresent() || !originalValue.isPresent()) {
+            return false;
+        }
+
+        return originalValue.get() != slider.get().getValue();
     }
 
     public Optional<Integer> getOriginValue(PomOption pomOption) {

@@ -6,10 +6,6 @@ import android.util.DisplayMetrics;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.slider.Slider;
-
-import java.util.Optional;
-
 import me.minemis.pomodoro02.R;
 import me.minemis.pomodoro02.listeners.choosetime.ResetButtonChooseTimeListener;
 import me.minemis.pomodoro02.managers.PomOption;
@@ -44,24 +40,11 @@ public class ChooseTimeActivity extends AppCompatActivity {
         super.onStop();
         mainActivity.getSaveManager().save();
 
-        if (checkIfChanged()) {
+        if (sliderManager.checkIfChanged(roundManager.getPreviousState())) {
             roundManager.resetRound();
         }
         roundManager.updateText();
         roundManager.checkIfRoundAreWrong();
-    }
-
-    private boolean checkIfChanged() {
-        PomOption currentState = roundManager.getPreviousState();
-
-        Optional<Slider> slider = sliderManager.getSlider(currentState);
-        Optional<Integer> originalValue = sliderManager.getOriginValue(currentState);
-
-        if ( !slider.isPresent() || !originalValue.isPresent()) {
-            return false;
-        }
-
-        return originalValue.get() != slider.get().getValue();
     }
 
     private void assignValues() {

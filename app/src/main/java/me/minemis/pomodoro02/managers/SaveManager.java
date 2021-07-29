@@ -25,18 +25,14 @@ public class SaveManager {
     }
 
     public void load() {
-        System.out.println("Loading...");
         settings.forEach((setting, integer) -> setRMValues(setting));
-        System.out.println("Loading done!");
     }
 
     private void setRMValues(PomOption pomOption) {
         settings.put(pomOption, sharedPreferences.getInt(pomOption.getId(), pomOption.getDefaultValue()));
-        System.out.println("Value set: " + sharedPreferences.getInt(pomOption.getId(), pomOption.getDefaultValue()));
     }
 
     private void putValueToEditor(PomOption pomOption, Integer value) {
         editor.putInt(pomOption.getId(), value);
-        System.out.println("Value put: " + value);
     }
 }

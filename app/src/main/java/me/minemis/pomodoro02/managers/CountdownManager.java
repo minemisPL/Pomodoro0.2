@@ -79,7 +79,6 @@ public class CountdownManager {
 
     public void stopTimer() {
         if (countDownTimer == null) {
-            System.out.println("Null found!");
             return;
         }
 
