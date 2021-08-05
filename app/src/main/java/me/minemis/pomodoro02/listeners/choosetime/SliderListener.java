@@ -7,7 +7,7 @@ import com.google.android.material.slider.Slider;
 import java.util.Optional;
 
 import me.minemis.pomodoro02.activities.ChooseTimeActivity;
-import me.minemis.pomodoro02.managers.PomOption;
+import me.minemis.pomodoro02.PomOption;
 import me.minemis.pomodoro02.managers.RoundManager;
 import me.minemis.pomodoro02.managers.SliderManager;
 

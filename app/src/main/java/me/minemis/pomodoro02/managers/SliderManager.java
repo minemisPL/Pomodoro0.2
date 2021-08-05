@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import me.minemis.pomodoro02.PomOption;
 import me.minemis.pomodoro02.activities.ChooseTimeActivity;
 import me.minemis.pomodoro02.listeners.choosetime.SliderListener;
 
@@ -36,29 +37,24 @@ public class SliderManager {
 
     public void setSliderValue(Slider slider, int value) {
         for (Map.Entry<PomOption, Slider> entry : sliders.entrySet()) {
-            if (entry.getValue().equals(slider)) {
-                slider.setValue(value);
-                TextView sliderText = texts.get(entry.getKey());
+            if (!entry.getValue().equals(slider)) {
+                continue;
+            }
 
-                if (sliderText == null) {
-                    return;
-                }
-                sliderText.setText(String.valueOf(value));
+            slider.setValue(value);
+            TextView sliderText = texts.get(entry.getKey());
+
+            if (sliderText == null) {
                 return;
             }
+
+            sliderText.setText(String.valueOf(value));
+            return;
         }
     }
 
     public void assignSliderValue(PomOption pomOption, int value) {
-        Slider slider = sliders.get(pomOption);
-        TextView textView = texts.get(pomOption);
-
-        if (slider == null || textView == null) {
-            return;
-        }
-
-        slider.setValue(value);
-        textView.setText(String.valueOf(value));
+        setSliderValue(pomOption, value);
         originValues.put(pomOption, value);
     }
 

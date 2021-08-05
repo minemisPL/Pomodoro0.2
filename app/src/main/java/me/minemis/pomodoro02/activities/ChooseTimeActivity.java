@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import me.minemis.pomodoro02.R;
 import me.minemis.pomodoro02.listeners.choosetime.ResetButtonChooseTimeListener;
-import me.minemis.pomodoro02.managers.PomOption;
+import me.minemis.pomodoro02.PomOption;
 import me.minemis.pomodoro02.managers.RoundManager;
 import me.minemis.pomodoro02.managers.SliderManager;
 import me.minemis.pomodoro02.managers.ViewManager;
@@ -43,8 +43,12 @@ public class ChooseTimeActivity extends AppCompatActivity {
         if (sliderManager.checkIfChanged(roundManager.getPreviousState())) {
             roundManager.resetRound();
         }
+
         roundManager.updateText();
-        roundManager.checkIfRoundAreWrong();
+
+        if (roundManager.isWrongRound()) {
+            roundManager.reset();
+        }
     }
 
     private void assignValues() {

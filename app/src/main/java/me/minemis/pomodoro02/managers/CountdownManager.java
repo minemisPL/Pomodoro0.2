@@ -3,9 +3,12 @@ package me.minemis.pomodoro02.managers;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.widget.ProgressBar;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import java.util.Locale;
+import java.util.Optional;
 
+import me.minemis.pomodoro02.R;
 import me.minemis.pomodoro02.activities.MainActivity;
 
 public class CountdownManager {
@@ -13,6 +16,7 @@ public class CountdownManager {
     private final TextView txtTimer;
     private final ProgressBar progressBar;
     private CountDownTimer countDownTimer;
+    private final PomNotificationManager pomNotificationManager;
     private long originTimeInMinutes;
     private long timeLeftInMillis;
     private double progressPart;
@@ -22,13 +26,14 @@ public class CountdownManager {
 
     public CountdownManager(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+        this.pomNotificationManager = mainActivity.getPomNotificationManager();
         ViewManager.Main mainViewManager = mainActivity.getMainViewManager();
         this.txtTimer = mainViewManager.getTextViewTimer();
         this.progressBar = mainViewManager.getProgressBar();
     }
 
     public void newCountdown(long timeInMinutes) {
-        timeLeftInMillis = timeInMinutes * 60 * 1000;
+        this.timeLeftInMillis = timeInMinutes * 60 * 1000;
 
         updateCountdownText();
 
@@ -44,7 +49,6 @@ public class CountdownManager {
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
                 timeLeftInMillis = millisUntilFinished;
                 updateCountdownText();
                 progress = progress - progressPart;
@@ -64,17 +68,19 @@ public class CountdownManager {
 
         updateCountdownText();
 
-        if (canPass) {
-            canPass = false;
-            isRunning = true;
-
-            new Handler().postDelayed(() -> {
-                updateCountdownText();
-                newCountdownTimer();
-                countDownTimer.start();
-                canPass = true;
-            }, 1000);
+        if (!canPass) {
+            return;
         }
+
+        canPass = false;
+        isRunning = true;
+
+        new Handler().postDelayed(() -> {
+            updateCountdownText();
+            newCountdownTimer();
+            countDownTimer.start();
+            canPass = true;
+        }, 1000);
     }
 
     public void stopTimer() {
@@ -92,7 +98,9 @@ public class CountdownManager {
 
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
 
-        txtTimer.setText(timeLeftFormatted);
+        this.txtTimer.setText(timeLeftFormatted);
+        pomNotificationManager.setTimerText(timeLeftFormatted);
+        pomNotificationManager.notifyTimer();
     }
 
     public void reset() {

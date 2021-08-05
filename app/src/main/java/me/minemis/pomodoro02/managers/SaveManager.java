@@ -5,34 +5,31 @@ import android.content.SharedPreferences;
 
 import java.util.Map;
 
+import me.minemis.pomodoro02.PomOption;
 import me.minemis.pomodoro02.activities.MainActivity;
 
 public class SaveManager {
-    private final SharedPreferences sharedPreferences;
+    private final SharedPreferences preferences;
     private final SharedPreferences.Editor editor;
     private final Map<PomOption, Integer> settings;
 
     @SuppressLint("CommitPrefEdits")
-    public SaveManager(MainActivity mainActivity, SharedPreferences sharedPreferences) {
-        this.sharedPreferences = sharedPreferences;
-        this.editor = sharedPreferences.edit();
+    public SaveManager(MainActivity mainActivity, SharedPreferences preferences) {
+        this.preferences = preferences;
+        this.editor = preferences.edit();
         this.settings = mainActivity.getRoundManager().getSettings();
     }
 
     public void save() {
-        settings.forEach(this::putValueToEditor);
+        settings.forEach(this::setData);
         editor.apply();
     }
 
     public void load() {
-        settings.forEach((setting, integer) -> setRMValues(setting));
+        settings.forEach((option, data) -> settings.put(option, preferences.getInt(option.getId(), option.getDefaultValue())));
     }
 
-    private void setRMValues(PomOption pomOption) {
-        settings.put(pomOption, sharedPreferences.getInt(pomOption.getId(), pomOption.getDefaultValue()));
-    }
-
-    private void putValueToEditor(PomOption pomOption, Integer value) {
-        editor.putInt(pomOption.getId(), value);
+    private void setData(PomOption option, Integer data) {
+        editor.putInt(option.getId(), data);
     }
 }

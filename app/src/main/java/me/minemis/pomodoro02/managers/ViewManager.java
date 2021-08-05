@@ -33,18 +33,18 @@ public class ViewManager {
         public Main(MainActivity mainActivity) {
             this.mainActivity = mainActivity;
 
-            textViewTimer =     mainActivity.findViewById(R.id.txt_timer);
-            btnStartPause =     mainActivity.findViewById(R.id.btn_start);
-            btnReset =          mainActivity.findViewById(R.id.btn_reset);
-            progressBar =       mainActivity.findViewById(R.id.progress_bar);
-            btnNext =           mainActivity.findViewById(R.id.btn_next_phase);
-            txtCurrentState =   mainActivity.findViewById(R.id.txt_current_state);
-            txtWhichRound =     mainActivity.findViewById(R.id.txt_which_round);
-            txtTotalRounds =    mainActivity.findViewById(R.id.txt_total_value);
+            textViewTimer =         mainActivity.findViewById(R.id.txt_timer);
+            btnStartPause =         mainActivity.findViewById(R.id.btn_start);
+            btnReset =              mainActivity.findViewById(R.id.btn_reset);
+            progressBar =           mainActivity.findViewById(R.id.progress_bar);
+            btnNext =               mainActivity.findViewById(R.id.btn_next_phase);
+            txtCurrentState =       mainActivity.findViewById(R.id.txt_current_state);
+            txtWhichRound =         mainActivity.findViewById(R.id.txt_which_round);
+            txtTotalRounds =        mainActivity.findViewById(R.id.txt_total_value);
 
-            text1 =             mainActivity.findViewById(R.id.textView);
-            text2 =             mainActivity.findViewById(R.id.textView2);
-            text3 =             mainActivity.findViewById(R.id.textView3);
+            text1 =                 mainActivity.findViewById(R.id.textView);
+            text2 =                 mainActivity.findViewById(R.id.textView2);
+            text3 =                 mainActivity.findViewById(R.id.textView3);
         }
 
         public void assignListeners() {

@@ -1,4 +1,4 @@
-package me.minemis.pomodoro02.managers;
+package me.minemis.pomodoro02;
 
 import java.util.function.Supplier;
 

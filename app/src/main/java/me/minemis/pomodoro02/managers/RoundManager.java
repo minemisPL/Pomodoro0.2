@@ -6,6 +6,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.minemis.pomodoro02.PomOption;
 import me.minemis.pomodoro02.activities.MainActivity;
 
 public class RoundManager {
@@ -105,9 +106,7 @@ public class RoundManager {
         return previousState;
     }
 
-    public void checkIfRoundAreWrong() {
-        if (currentRound >= getPomOptionValue(PomOption.ROUNDS)) {
-            reset();
-        }
+    public boolean isWrongRound() {
+        return currentRound >= getPomOptionValue(PomOption.ROUNDS);
     }
 }
