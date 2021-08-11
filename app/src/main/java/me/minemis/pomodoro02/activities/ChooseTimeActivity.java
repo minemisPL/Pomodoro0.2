@@ -38,7 +38,7 @@ public class ChooseTimeActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        mainActivity.getSaveManager().save();
+        mainActivity.getSaveManager().savePreferences();
 
         if (sliderManager.checkIfChanged(roundManager.getPreviousState())) {
             roundManager.resetRound();

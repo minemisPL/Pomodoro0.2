@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.minemis.pomodoro02.PomOption;
+import me.minemis.pomodoro02.PomodoroCache;
 import me.minemis.pomodoro02.activities.MainActivity;
 
 public class RoundManager {
@@ -51,6 +52,20 @@ public class RoundManager {
 
             Integer rounds = getPomOptionValue(PomOption.ROUNDS);
 
+            currentState = currentRound == rounds ? PomOption.LONG_BREAK : PomOption.SHORT_BREAK;
+            return;
+        }
+        currentState = PomOption.FOCUS;
+    }
+
+    public void continueRound() {
+        this.countdownManager.continueCountDown();
+
+        updateText();
+        updateStateText();
+
+        if (currentState == PomOption.FOCUS) {
+            Integer rounds = getPomOptionValue(PomOption.ROUNDS);
             currentState = currentRound == rounds ? PomOption.LONG_BREAK : PomOption.SHORT_BREAK;
             return;
         }
@@ -108,5 +123,25 @@ public class RoundManager {
 
     public boolean isWrongRound() {
         return currentRound >= getPomOptionValue(PomOption.ROUNDS);
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    public int getTotalRounds() {
+        return totalRounds;
+    }
+
+    public void setCurrentState(PomOption currentState) {
+        this.currentState = currentState;
+    }
+
+    public void setCurrentRound(int currentRound) {
+        this.currentRound = currentRound;
+    }
+
+    public void setTotalRounds(int totalRounds) {
+        this.totalRounds = totalRounds;
     }
 }

@@ -20,6 +20,8 @@
             android:name=".activities.ChooseTimeActivity"
             android:theme="@style/ChooseTimePopTheme" />
 
+        <receiver android:name=".NotificationReceiver"/>
+
     </application>
 
 </manifest>

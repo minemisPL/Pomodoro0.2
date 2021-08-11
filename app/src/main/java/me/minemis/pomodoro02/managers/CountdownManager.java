@@ -8,13 +8,14 @@ import android.widget.TextView;
 import java.util.Locale;
 import java.util.Optional;
 
+import me.minemis.pomodoro02.PomodoroCache;
 import me.minemis.pomodoro02.R;
 import me.minemis.pomodoro02.activities.MainActivity;
 
 public class CountdownManager {
     private final MainActivity mainActivity;
-    private final TextView txtTimer;
-    private final ProgressBar progressBar;
+    private final TextView txtTimer; //
+    private final ProgressBar progressBar; //
     private CountDownTimer countDownTimer;
     private final PomNotificationManager pomNotificationManager;
     private long originTimeInMinutes;
@@ -43,6 +44,24 @@ public class CountdownManager {
 
         this.progressBar.setProgress(10000);
         this.progress = 10000;
+    }
+
+    public void continueCountDown() {
+        this.timeLeftInMillis = PomodoroCache.timeLeftInMillis;
+
+        updateCountdownText();
+
+        this.originTimeInMinutes = PomodoroCache.originalTimeLeft * 60 * 1000;
+        this.progressPart = PomodoroCache.progressPart;
+
+        this.progress = PomodoroCache.progress;
+
+        this.progressBar.setProgress((int) progress);
+
+        if (PomodoroCache.isRunning) {
+            this.startTimerContinue();
+        }
+
     }
 
     private void newCountdownTimer() {
@@ -83,6 +102,14 @@ public class CountdownManager {
         }, 1000);
     }
 
+    public void startTimerContinue() {
+        updateCountdownText();
+
+        isRunning = true;
+        newCountdownTimer();
+        countDownTimer.start();
+    }
+
     public void stopTimer() {
         if (countDownTimer == null) {
             return;
@@ -110,5 +137,41 @@ public class CountdownManager {
 
     public boolean isRunning() {
         return isRunning;
+    }
+
+    public long getTimeLeftInMillis() {
+        return timeLeftInMillis;
+    }
+
+    public double getProgress() {
+        return progress;
+    }
+
+    public long getOriginTimeInMinutes() {
+        return originTimeInMinutes;
+    }
+
+    public double getProgressPart() {
+        return progressPart;
+    }
+
+    public void setOriginTimeInMinutes(long originTimeInMinutes) {
+        this.originTimeInMinutes = originTimeInMinutes;
+    }
+
+    public void setTimeLeftInMillis(long timeLeftInMillis) {
+        this.timeLeftInMillis = timeLeftInMillis;
+    }
+
+    public void setProgressPart(double progressPart) {
+        this.progressPart = progressPart;
+    }
+
+    public void setProgress(double progress) {
+        this.progress = progress;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
     }
 }

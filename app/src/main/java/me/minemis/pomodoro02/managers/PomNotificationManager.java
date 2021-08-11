@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 
+import me.minemis.pomodoro02.NotificationReceiver;
 import me.minemis.pomodoro02.R;
 import me.minemis.pomodoro02.activities.MainActivity;
 
@@ -31,14 +32,15 @@ public class PomNotificationManager extends AppCompatActivity {
     }
 
     private void createTimerNotification() {
-        Intent intent = mainActivity.getIntent();
-        TaskStackBuilder pendingIntent = TaskStackBuilder.create(mainActivity);
-        pendingIntent.addNextIntent(intent);
-
-        PendingIntent pIntent = pendingIntent.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         this.notificationView = new RemoteViews(mainActivity.getPackageName(),
                 R.layout.notification_timer);
+
+        Intent intent = mainActivity.getIntent();
+        TaskStackBuilder pendingIntent1 = TaskStackBuilder.create(mainActivity);
+        pendingIntent1.addNextIntent(intent);
+
+        PendingIntent pIntent = pendingIntent1.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         this.notification = new NotificationCompat.Builder(mainActivity, CHANNEL_ID)
                 .setCustomContentView(notificationView)

@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
+import me.minemis.pomodoro02.PomodoroCache;
 import me.minemis.pomodoro02.R;
 import me.minemis.pomodoro02.managers.CountdownManager;
 import me.minemis.pomodoro02.managers.PomNotificationManager;
@@ -34,21 +35,65 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        System.out.println("Started!");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        System.out.println("Restarted!");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        System.out.println("Paused!");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("Resumed!");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("Created!");
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         this.assignValues();
-        this.saveManager.load();
+        this.saveManager.loadPreferences();
+        System.out.println("Time before load after load: " + PomodoroCache.timeLeftInMillis);
+        this.saveManager.loadData();
+        System.out.println("Time left after load: " + PomodoroCache.timeLeftInMillis);
         this.createNotificationChannel();
 
-        this.roundManager.nextRound();
+        if (PomodoroCache.isFirstRun) {
+            this.roundManager.nextRound();
+            return;
+        }
+        this.roundManager.continueRound();
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        this.saveManager.save();
+        this.saveManager.savePreferences();
+        System.out.println("Stopped!");
     }
+
+    @Override
+    protected void onDestroy() {
+        saveManager.saveData();
+        System.out.println("Time left: " + PomodoroCache.timeLeftInMillis);
+        super.onDestroy();
+        System.out.println("Destroyed!");
+    }
+
+
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -72,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
         this.countdownManager = new CountdownManager(this);
         this.roundManager = new RoundManager(this);
         this.saveManager = new SaveManager(this, getSharedPreferences("PomodoroTimes02", MODE_PRIVATE));
-
         this.mainViewManager.assignListeners();
     }
 
