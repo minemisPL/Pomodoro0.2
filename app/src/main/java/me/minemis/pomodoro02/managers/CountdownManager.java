@@ -8,11 +8,12 @@ import android.widget.TextView;
 import java.util.Locale;
 import java.util.Optional;
 
+import me.minemis.pomodoro02.App;
 import me.minemis.pomodoro02.R;
 import me.minemis.pomodoro02.activities.MainActivity;
 
 public class CountdownManager {
-    private final MainActivity mainActivity;
+    private final App app;
     private final TextView txtTimer;
     private final ProgressBar progressBar;
     private CountDownTimer countDownTimer;
@@ -24,10 +25,10 @@ public class CountdownManager {
     private boolean isRunning = false;
     private boolean canPass = true;
 
-    public CountdownManager(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-        this.pomNotificationManager = mainActivity.getPomNotificationManager();
-        ViewManager.Main mainViewManager = mainActivity.getMainViewManager();
+    public CountdownManager() {
+        this.app = App.getInstance();
+        this.pomNotificationManager = app.getPomNotificationManager();
+        ViewManager.Main mainViewManager = MainActivity.getInstance().getMainViewManager();
         this.txtTimer = mainViewManager.getTextViewTimer();
         this.progressBar = mainViewManager.getProgressBar();
     }
@@ -58,7 +59,7 @@ public class CountdownManager {
 
             @Override
             public void onFinish() {
-                mainActivity.getRoundManager().nextRound();
+                app.getRoundManager().nextRound();
                 startTimer();
             }
         };

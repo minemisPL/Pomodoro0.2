@@ -48,10 +48,10 @@ public class ViewManager {
         }
 
         public void assignListeners() {
-            btnStartPause       .setOnClickListener(new StartPauseButtonListener(mainActivity));
-            btnNext             .setOnClickListener(new NextButtonListener(mainActivity));
-            btnReset            .setOnClickListener(new ResetButtonMainListener(mainActivity));
-            textViewTimer       .setOnClickListener(new TextTimerListener(mainActivity));
+            btnStartPause       .setOnClickListener(new StartPauseButtonListener());
+            btnNext             .setOnClickListener(new NextButtonListener());
+            btnReset            .setOnClickListener(new ResetButtonMainListener());
+            textViewTimer       .setOnClickListener(new TextTimerListener());
         }
 
         @SuppressLint("UseCompatLoadingForDrawables")

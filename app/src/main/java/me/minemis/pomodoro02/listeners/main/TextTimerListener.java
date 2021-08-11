@@ -10,8 +10,8 @@ public class TextTimerListener implements View.OnClickListener {
 
     private final MainActivity mainActivity;
 
-    public TextTimerListener(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    public TextTimerListener() {
+        this.mainActivity = MainActivity.getInstance();
     }
 
     @Override

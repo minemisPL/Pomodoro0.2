@@ -6,6 +6,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.minemis.pomodoro02.App;
 import me.minemis.pomodoro02.PomOption;
 import me.minemis.pomodoro02.activities.MainActivity;
 
@@ -22,9 +23,11 @@ public class RoundManager {
     private final TextView txtTotalRounds;
     private final TextView txtState;
 
-    public RoundManager(MainActivity mainActivity) {
-        this.countdownManager = mainActivity.getCountdownManager();
-        mainViewManager = mainActivity.getMainViewManager();
+    public RoundManager() {
+        App app = App.getInstance();
+        MainActivity mainActivity = MainActivity.getInstance();
+        this.countdownManager = app.getCountdownManager();
+        this.mainViewManager = mainActivity.getMainViewManager();
         this.txtWhichRound = mainViewManager.getTxtWhichRound();
         this.txtTotalRounds = mainViewManager.getTxtTotalRounds();
         this.txtState = mainViewManager.getTxtCurrentState();

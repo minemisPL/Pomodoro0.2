@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import me.minemis.pomodoro02.App;
 import me.minemis.pomodoro02.R;
 import me.minemis.pomodoro02.listeners.choosetime.ResetButtonChooseTimeListener;
 import me.minemis.pomodoro02.PomOption;
@@ -15,7 +16,7 @@ import me.minemis.pomodoro02.managers.ViewManager;
 
 public class ChooseTimeActivity extends AppCompatActivity {
 
-    private MainActivity mainActivity;
+    private App app;
     private SliderManager sliderManager;
     private ViewManager.ChooseTime ctViewManager;
     private RoundManager roundManager;
@@ -38,7 +39,7 @@ public class ChooseTimeActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        mainActivity.getSaveManager().save();
+        app.getSaveManager().save();
 
         if (sliderManager.checkIfChanged(roundManager.getPreviousState())) {
             roundManager.resetRound();
@@ -52,8 +53,8 @@ public class ChooseTimeActivity extends AppCompatActivity {
     }
 
     private void assignValues() {
-        mainActivity =      MainActivity.getInstance();
-        roundManager =      mainActivity.getRoundManager();
+        app =               App.getInstance();
+        roundManager =      app.getRoundManager();
 
         sliderManager =     new SliderManager();
         ctViewManager =     new ViewManager.ChooseTime(this);

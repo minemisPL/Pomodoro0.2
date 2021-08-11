@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import java.util.Map;
 
+import me.minemis.pomodoro02.App;
 import me.minemis.pomodoro02.PomOption;
 import me.minemis.pomodoro02.activities.MainActivity;
 
@@ -14,10 +15,10 @@ public class SaveManager {
     private final Map<PomOption, Integer> settings;
 
     @SuppressLint("CommitPrefEdits")
-    public SaveManager(MainActivity mainActivity, SharedPreferences preferences) {
+    public SaveManager(SharedPreferences preferences) {
         this.preferences = preferences;
         this.editor = preferences.edit();
-        this.settings = mainActivity.getRoundManager().getSettings();
+        this.settings = App.getInstance().getRoundManager().getSettings();
     }
 
     public void save() {
