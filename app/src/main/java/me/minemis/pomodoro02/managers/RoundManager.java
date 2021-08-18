@@ -13,17 +13,23 @@ import me.minemis.pomodoro02.activities.MainActivity;
 public class RoundManager {
 
     private final Map<PomOption, Integer> settings = new HashMap<>();
-    private final CountdownManager countdownManager;
-    private final ViewManager.Main mainViewManager;
+    private CountdownManager countdownManager;
+    private ViewManager.Main mainViewManager;
     private PomOption currentState = PomOption.FOCUS;
     private PomOption previousState = PomOption.SHORT_BREAK;
     private int currentRound = 0;
     private int totalRounds = 0;
-    private final TextView txtWhichRound;
-    private final TextView txtTotalRounds;
-    private final TextView txtState;
+    private TextView txtWhichRound;
+    private TextView txtTotalRounds;
+    private TextView txtState;
 
     public RoundManager() {
+        assignValues();
+        assignSettings(PomOption.FOCUS, PomOption.SHORT_BREAK, PomOption.LONG_BREAK, PomOption.ROUNDS);
+        updateText();
+    }
+
+    public void assignValues() {
         App app = App.getInstance();
         MainActivity mainActivity = MainActivity.getInstance();
         this.countdownManager = app.getCountdownManager();
@@ -31,16 +37,17 @@ public class RoundManager {
         this.txtWhichRound = mainViewManager.getTxtWhichRound();
         this.txtTotalRounds = mainViewManager.getTxtTotalRounds();
         this.txtState = mainViewManager.getTxtCurrentState();
-        assignSettings(PomOption.FOCUS, PomOption.SHORT_BREAK, PomOption.LONG_BREAK, PomOption.ROUNDS);
+
         updateText();
+        updateStateText(currentState);
     }
 
     public void nextRound() {
-        this.countdownManager.newCountdown(getPomOptionValue(currentState));
+        this.countdownManager.newCountdown(getPomOptionValue(currentState), true);
 
-        updateStateText();
+        updateStateText(currentState);
 
-        previousState = currentState;
+        this.previousState = this.currentState;
 
         if (currentState == PomOption.FOCUS) {
             currentRound++;
@@ -60,9 +67,27 @@ public class RoundManager {
         currentState = PomOption.FOCUS;
     }
 
+    public void continueCountdown() {
+        this.countdownManager.newCountdown(getPomOptionValue(currentState), false);
+
+        this.previousState = this.currentState;
+
+        updateText();
+
+        if (currentState == PomOption.SHORT_BREAK || currentState == PomOption.LONG_BREAK) {
+            updateStateText(PomOption.FOCUS);
+            return;
+        }
+        if (currentRound == getPomOptionValue(PomOption.ROUNDS)) {
+            updateStateText(PomOption.LONG_BREAK);
+            return;
+        }
+        updateStateText(PomOption.SHORT_BREAK);
+    }
+
     public void resetRound() {
         this.countdownManager.stopTimer();
-        this.countdownManager.newCountdown(getPomOptionValue(previousState));
+        this.countdownManager.newCountdown(getPomOptionValue(previousState), true);
         this.mainViewManager.setPlayButtonAsArrow();
     }
 
@@ -72,8 +97,8 @@ public class RoundManager {
         txtTotalRounds.setText(String.valueOf(totalRounds));
     }
 
-    private void updateStateText() {
-        txtState.setText(currentState.getStringValue());
+    private void updateStateText(PomOption state) {
+        txtState.setText(state.getStringValue());
     }
 
     private Integer getPomOptionValue(PomOption pomOption) {

@@ -19,9 +19,7 @@ public class StartPauseButtonListener implements View.OnClickListener {
     public StartPauseButtonListener() {
         this.app = App.getInstance();
         this.countdownManager = app.getCountdownManager();
-
-        MainActivity mainActivity = MainActivity.getInstance();
-        this.viewManager = mainActivity.getMainViewManager();
+        this.viewManager = MainActivity.getInstance().getMainViewManager();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -33,7 +31,6 @@ public class StartPauseButtonListener implements View.OnClickListener {
 
         if (countdownManager.isRunning()){
             countdownManager.stopTimer();
-            viewManager.setPlayButtonAsArrow();
             return;
         }
 

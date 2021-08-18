@@ -32,18 +32,13 @@ public class MainActivity extends AppCompatActivity {
         instance = this;
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         this.assignValues();
         this.saveManager.load();
-
-        this.roundManager.nextRound();
     }
-
 
     @Override
     protected void onStop() {
@@ -52,12 +47,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void assignValues() {
-        App app = App.getInstance();
         this.mainViewManager = new ViewManager.Main(this);
+
+        App app = App.getInstance();
+        if (app.isFirstRun) {
+            app.setPomNotificationManager(new PomNotificationManager());
+            app.setCountdownManager(new CountdownManager());
+            app.setRoundManager(new RoundManager());
+            app.setSaveManager(new SaveManager(getSharedPreferences("PomodoroTimes02", MODE_PRIVATE)));
+
+        }
+
         this.mainViewManager.assignListeners();
+
         this.roundManager = app.getRoundManager();
+        this.roundManager.assignValues();
         this.saveManager = app.getSaveManager();
 
+        if (!app.isFirstRun) {
+            this.roundManager.continueCountdown();
+        } else {
+            this.roundManager.nextRound();
+        }
+
+        app.isFirstRun = false;
     }
 
     public ViewManager.Main getMainViewManager() {

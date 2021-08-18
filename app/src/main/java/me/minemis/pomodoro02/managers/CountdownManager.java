@@ -14,10 +14,11 @@ import me.minemis.pomodoro02.activities.MainActivity;
 
 public class CountdownManager {
     private final App app;
-    private final TextView txtTimer;
-    private final ProgressBar progressBar;
-    private CountDownTimer countDownTimer;
     private final PomNotificationManager pomNotificationManager;
+    private ViewManager.Main mainViewManager;
+    private TextView txtTimer;
+    private ProgressBar progressBar;
+    private CountDownTimer countDownTimer;
     private long originTimeInMinutes;
     private long timeLeftInMillis;
     private double progressPart;
@@ -28,22 +29,35 @@ public class CountdownManager {
     public CountdownManager() {
         this.app = App.getInstance();
         this.pomNotificationManager = app.getPomNotificationManager();
-        ViewManager.Main mainViewManager = MainActivity.getInstance().getMainViewManager();
+        assignViews();
+    }
+
+    private void assignViews() {
+        this.mainViewManager = MainActivity.getInstance().getMainViewManager();
+
         this.txtTimer = mainViewManager.getTextViewTimer();
         this.progressBar = mainViewManager.getProgressBar();
     }
 
-    public void newCountdown(long timeInMinutes) {
+    public void newCountdown(long timeInMinutes, boolean resetProgress) {
+
+        this.assignViews();
         this.timeLeftInMillis = timeInMinutes * 60 * 1000;
 
-        updateCountdownText();
+        if (!this.isRunning) {
+            this.updateCountdownText();
+        } else {
+            this.mainViewManager.setPlayButtonAsPause();
+        }
 
         this.originTimeInMinutes = timeInMinutes;
 
-        this.progressPart = 10000 / ((double) originTimeInMinutes * 60);
+        if (resetProgress) {
+            this.progressPart = 10000 / ((double) originTimeInMinutes * 60);
 
-        this.progressBar.setProgress(10000);
-        this.progress = 10000;
+            this.progressBar.setProgress(10000);
+            this.progress = 10000;
+        }
     }
 
     private void newCountdownTimer() {
@@ -80,6 +94,7 @@ public class CountdownManager {
             updateCountdownText();
             newCountdownTimer();
             countDownTimer.start();
+            mainViewManager.setPlayButtonAsPause();
             canPass = true;
         }, 1000);
     }
@@ -91,6 +106,7 @@ public class CountdownManager {
 
         countDownTimer.cancel();
         isRunning = false;
+        this.mainViewManager.setPlayButtonAsArrow();
     }
 
     private void updateCountdownText() {
@@ -100,13 +116,14 @@ public class CountdownManager {
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
 
         this.txtTimer.setText(timeLeftFormatted);
-        pomNotificationManager.setTimerText(timeLeftFormatted);
-        pomNotificationManager.notifyTimer();
+        this.pomNotificationManager.setTimerText(timeLeftFormatted);
+        this.pomNotificationManager.notifyTimer();
     }
 
     public void reset() {
-        newCountdown(this.originTimeInMinutes);
-        isRunning = false;
+        this.stopTimer();
+        this.newCountdown(this.originTimeInMinutes, true);
+        this.isRunning = false;
     }
 
     public boolean isRunning() {

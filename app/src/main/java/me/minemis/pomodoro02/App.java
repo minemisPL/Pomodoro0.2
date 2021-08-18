@@ -13,6 +13,7 @@ import me.minemis.pomodoro02.managers.SaveManager;
 public class App extends Application {
     public static final String CHANNEL_ID = "pom_1";
     public static final String CHANNEL_NAME = "Pomodoro";
+    public boolean isFirstRun = true;
     private static App instance;
     private CountdownManager countdownManager;
     private RoundManager roundManager;
@@ -27,10 +28,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        //createNotificationChannel();
-
-        assignValues();
+        createNotificationChannel();
     }
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -42,13 +40,6 @@ public class App extends Application {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(notificationChannel);
         }
-    }
-
-    private void assignValues() {
-        this.pomNotificationManager = new PomNotificationManager();
-        this.countdownManager = new CountdownManager();
-        this.roundManager = new RoundManager();
-        this.saveManager = new SaveManager(getSharedPreferences("PomodoroTimes02", MODE_PRIVATE));
     }
 
     public static App getInstance() {
@@ -69,5 +60,21 @@ public class App extends Application {
 
     public PomNotificationManager getPomNotificationManager() {
         return pomNotificationManager;
+    }
+
+    public void setCountdownManager(CountdownManager countdownManager) {
+        this.countdownManager = countdownManager;
+    }
+
+    public void setRoundManager(RoundManager roundManager) {
+        this.roundManager = roundManager;
+    }
+
+    public void setSaveManager(SaveManager saveManager) {
+        this.saveManager = saveManager;
+    }
+
+    public void setPomNotificationManager(PomNotificationManager pomNotificationManager) {
+        this.pomNotificationManager = pomNotificationManager;
     }
 }

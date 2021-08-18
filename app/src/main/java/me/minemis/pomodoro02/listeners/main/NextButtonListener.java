@@ -12,14 +12,11 @@ public class NextButtonListener implements View.OnClickListener {
 
     private final CountdownManager countdownManager;
     private final RoundManager roundManager;
-    private final ViewManager.Main mainViewManager;
 
     public NextButtonListener() {
         App app = App.getInstance();
-        MainActivity mainActivity = MainActivity.getInstance();
         this.countdownManager = app.getCountdownManager();
         this.roundManager = app.getRoundManager();
-        this.mainViewManager = mainActivity.getMainViewManager();
     }
 
     @Override
@@ -27,6 +24,5 @@ public class NextButtonListener implements View.OnClickListener {
         countdownManager.stopTimer();
         roundManager.nextRound();
         countdownManager.startTimer();
-        mainViewManager.setPlayButtonAsPause();
     }
 }
